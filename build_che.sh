@@ -13,8 +13,20 @@ cd che
 export NPM_CONFIG_PREFIX=~/.che_node_modules 
 export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
 scl enable rh-nodejs4 'npm install --unsafe-perm -g bower gulp typings'
-
-# its important that the last line on this script be the build script
-#   since the exit code from this script is used in CI runs
-#   to confirm if the build worked or not
 scl enable rh-maven33 rh-nodejs4 'mvn clean install -Pfast'
+if [ $? -eq 0 ]; then
+  # Now lets build the local docker image
+  cd dockerfiles/che/
+  rm Dockerfile && mv Dockefile.centos Dockerfile
+
+  # lets change the tag, to make sure we dont end up 
+  # running the one hosted at a remote registry
+  sed -i 's/IMAGE_NAME="eclipse/IMAGE_NAME="myeclipse/g' build.sh
+  bash ./build.sh
+  if [ $? -ne 0 ]; then
+    echo 'Docker Build Failed'
+    exit 2
+else
+  echo 'Build Failed!'
+  exit 1
+fi
