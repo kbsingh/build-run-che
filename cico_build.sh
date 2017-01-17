@@ -19,7 +19,7 @@ scl enable rh-maven33 rh-nodejs4 'mvn clean install -Pfast'
 if [ $? -eq 0 ]; then
   # Now lets build the local docker image
   yum -y install docker-latest
-  sudo systemctl start docker
+  sudo systemctl start docker-latest
   cd dockerfiles/che/
   rm Dockerfile && mv Dockerfile.centos Dockerfile
 
