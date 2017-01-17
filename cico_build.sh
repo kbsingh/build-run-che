@@ -18,19 +18,21 @@ scl enable rh-nodejs4 'npm install -g bower gulp typings'
 scl enable rh-maven33 rh-nodejs4 'mvn clean install -Pfast'
 if [ $? -eq 0 ]; then
   # Now lets build the local docker image
-  yum -y install docker-latest
-  sudo systemctl start docker-latest
+  yum -y install docker
+  sudo systemctl start docker
   cd dockerfiles/che/
-  rm Dockerfile && mv Dockerfile.centos Dockerfile
+  mv Dockerfile Dockerfile.alpine && mv Dockerfile.centos Dockerfile
 
-  # lets change the tag, to make sure we dont end up 
-  # running the one hosted at a remote registry
-  sed -i 's/IMAGE_NAME="eclipse/IMAGE_NAME="registry.centos.org\/eclipse/g' build.sh
-  bash ./build.sh
+  bash ./build.sh nightly-centos
   if [ $? -ne 0 ]; then
     echo 'Docker Build Failed'
     exit 2
   fi
+  
+  # lets change the tag and push it to the registry
+  docker tag eclipse/che-server:nightly-centos rhche/che-server:nightly
+  docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD
+  docker push rhche/che-server:nightly
 else
   echo 'Build Failed!'
   exit 1
