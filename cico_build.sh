@@ -28,6 +28,7 @@ if [ $? -eq 0 ]; then
   if [ $? -ne 0 ]; then
     echo 'Docker Build Failed'
     exit 2
+  fi
 else
   echo 'Build Failed!'
   exit 1
