@@ -25,7 +25,7 @@ if [ $? -eq 0 ]; then
 
   # lets change the tag, to make sure we dont end up 
   # running the one hosted at a remote registry
-  sed -i 's/IMAGE_NAME="eclipse/IMAGE_NAME="myeclipse/g' build.sh
+  sed -i 's/IMAGE_NAME="eclipse/IMAGE_NAME="registry.centos.org\/eclipse/g' build.sh
   bash ./build.sh
   if [ $? -ne 0 ]; then
     echo 'Docker Build Failed'
