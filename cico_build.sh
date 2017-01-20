@@ -11,7 +11,13 @@ cat jenkins-env | grep PASS > inherit-env
 yum -y update
 yum -y install centos-release-scl java-1.8.0-openjdk-devel git patch bzip2 golang
 yum -y install rh-maven33 rh-nodejs4
-git clone https://github.com/eclipse/che
+# Until PR https://github.com/eclipse/che/pull/3798 is not 
+# merged we need to build from ibuziuk branch
+# export GIT_REPO=https://github.com/eclipse/che
+# export GIT_BRANCH=master
+export GIT_REPO=https://github.com/ibuziuk/che
+export GIT_BRANCH=CHE-26
+git clone -b ${GIT_BRANCH} ${GIT_REPO}
 cd che 
 export NPM_CONFIG_PREFIX=~/.che_node_modules
 export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
