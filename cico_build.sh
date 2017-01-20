@@ -34,7 +34,7 @@ if [ $? -eq 0 ]; then
   
   # lets change the tag and push it to the registry
   docker tag eclipse/che-server:nightly-centos rhche/che-server:nightly
-  docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD
+  docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD -e noreply@redhat.com
   docker push rhche/che-server:nightly
 else
   echo 'Build Failed!'
