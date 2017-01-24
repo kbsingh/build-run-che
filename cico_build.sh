@@ -47,7 +47,7 @@ if [ $? -eq 0 ]; then
   
   # lets also push it locally
   docker tag rhche/che-server:nightly registry.ci.centos.org:5000/almighty/che:latest
-  docker push registry.ci.centos.org:5000/almghty/che:latest
+  docker push registry.ci.centos.org:5000/almighty/che:latest
 
 else
   echo 'Build Failed!'
