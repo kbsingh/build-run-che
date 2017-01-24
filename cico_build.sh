@@ -37,11 +37,16 @@ if [ $? -eq 0 ]; then
     echo 'Docker Build Failed'
     exit 2
   fi
-  
+
   # lets change the tag and push it to the registry
   docker tag eclipse/che-server:nightly-centos rhche/che-server:nightly
   docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD -e noreply@redhat.com
   docker push rhche/che-server:nightly
+  
+  # lets also push it locally
+  docker tag rhche/che-server:nightly registry.ci.centos.org:5000/almighty/che:latest
+  docker push registry.ci.centos.org:5000/almghty/che:latest
+
 else
   echo 'Build Failed!'
   exit 1
