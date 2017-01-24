@@ -9,7 +9,7 @@ cat jenkins-env | grep PASS > inherit-env
 . inherit-env
 
 yum -y update
-yum -y install centos-release-scl java-1.8.0-openjdk-devel git patch bzip2 golang
+yum -y install centos-release-scl java-1.8.0-openjdk-devel git patch bzip2 golang docker
 yum -y install rh-maven33 rh-nodejs4
 # Until PR https://github.com/eclipse/che/pull/3798 is not 
 # merged we need to build from ibuziuk branch
@@ -27,7 +27,6 @@ scl enable rh-nodejs4 'npm install -g bower gulp typings'
 scl enable rh-maven33 rh-nodejs4 'mvn clean install -Pfast'
 if [ $? -eq 0 ]; then
   # Now lets build the local docker image
-  yum -y install docker
   sudo systemctl start docker
   cd dockerfiles/che/
   mv Dockerfile Dockerfile.alpine && mv Dockerfile.centos Dockerfile
