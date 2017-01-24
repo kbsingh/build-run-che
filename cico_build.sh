@@ -11,6 +11,9 @@ cat jenkins-env | grep PASS > inherit-env
 yum -y update
 yum -y install centos-release-scl java-1.8.0-openjdk-devel git patch bzip2 golang docker
 yum -y install rh-maven33 rh-nodejs4
+
+sed -i '/OPTIONS=.*/c\OPTIONS="--selinux-enabled --log-driver=journald --insecure-registry registry.ci.centos.org:5000"' /etc/sysconfig/docker
+
 # Until PR https://github.com/eclipse/che/pull/3798 is not 
 # merged we need to build from ibuziuk branch
 # export GIT_REPO=https://github.com/eclipse/che
