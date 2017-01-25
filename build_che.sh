@@ -3,6 +3,7 @@
 # this script downloads the src and runs the build
 # to create the che binaries
 
+. config 
 
 git clone -b ${GIT_BRANCH} ${GIT_REPO}
 cd che 
