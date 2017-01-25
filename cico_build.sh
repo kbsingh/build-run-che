@@ -7,32 +7,25 @@
 
 cat jenkins-env | grep PASS > inherit-env
 . inherit-env
+. config 
 
 yum -y update
 yum -y install centos-release-scl java-1.8.0-openjdk-devel git patch bzip2 golang docker
 yum -y install rh-maven33 rh-nodejs4
 
 sed -i '/OPTIONS=.*/c\OPTIONS="--selinux-enabled --log-driver=journald --insecure-registry registry.ci.centos.org:5000"' /etc/sysconfig/docker
+systemctl start docker
 
-# Until PR https://github.com/eclipse/che/pull/3798 is not 
-# merged we need to build from ibuziuk branch
-# export GIT_REPO=https://github.com/eclipse/che
-# export GIT_BRANCH=master
-export GIT_REPO=https://github.com/ibuziuk/che
-export GIT_BRANCH=CHE-26
-git clone -b ${GIT_BRANCH} ${GIT_REPO}
-cd che 
-export NPM_CONFIG_PREFIX=~/.che_node_modules
-export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
-mkdir $NPM_CONFIG_PREFIX
-echo "{ \"allow_root\": true }" > ~/.bowerrc
-scl enable rh-nodejs4 'npm install -g bower gulp typings'
-scl enable rh-maven33 rh-nodejs4 'mvn clean install -Pfast'
+useradd ${BuildUser}
+mkdir -p ${HomeDir}
+chown ${BuildUser}:${BuildUser} ${HomeDir}
+
+cd ${HomeDir}
+runuser -u ${BuildUser} ./build_che.sh
 if [ $? -eq 0 ]; then
   # Now lets build the local docker image
-  sudo systemctl start docker
-  cd dockerfiles/che/
-  mv Dockerfile Dockerfile.alpine && mv Dockerfile.centos Dockerfile
+  cd che/dockerfiles/che/
+  cat Dockerfile.centos > Dockerfile
 
   bash ./build.sh nightly-centos
   if [ $? -ne 0 ]; then
