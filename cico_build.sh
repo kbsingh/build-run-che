@@ -20,7 +20,7 @@ useradd ${BuildUser}
 mkdir -p ${HomeDir}
 chown ${BuildUser}:${BuildUser} ${HomeDir}
 
-cp config ${HomeDir}/
+cp config build_che.sh ${HomeDir}/
 cd ${HomeDir}
 runuser -u ${BuildUser} ./build_che.sh
 if [ $? -eq 0 ]; then
