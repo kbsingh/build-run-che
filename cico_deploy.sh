@@ -13,6 +13,9 @@ yum install -y origin-clients
 # Login
 oc login "${CHE_OPENSHIFT_ENDPOINT}" -u "${CHE_OPENSHIFT_USERNAME}" -p "${CHE_OPENSHIFT_PASSWORD}"
 
+# Ensure we're in the che project
+oc project ${CHE_OPENSHIFT_PROJECT}
+
 # Create or update template
 oc create -f che.json >/dev/null 2>&1 || oc replace -f che.json >/dev/null 2>&1
 
@@ -20,7 +23,6 @@ oc create -f che.json >/dev/null 2>&1 || oc replace -f che.json >/dev/null 2>&1
 oc get dc che-host > /dev/null 2>&1
 if [[ $? -eq 0 ]]; then
     # Cleanup the project
-    oc project ${CHE_OPENSHIFT_PROJECT}
     oc delete dc,route,svc,po --all
     sleep 5
 fi
