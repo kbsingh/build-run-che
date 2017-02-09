@@ -20,11 +20,11 @@ oc project ${CHE_OPENSHIFT_PROJECT}
 oc -n ${CHE_OPENSHIFT_PROJECT} create -f che.json >/dev/null 2>&1 || oc -n ${CHE_OPENSHIFT_PROJECT} replace -f che.json >/dev/null 2>&1
 
 # Check if deploymentConfig is already present
-oc -n ${CHE_OPENSHIFT_PROJECT} get dc che-host > /dev/null 2>&1
-if [[ $? -eq 0 ]]; then
+OUT=$(oc -n ${CHE_OPENSHIFT_PROJECT} get dc ${CHE_APPLICATION_NAME} 2> /dev/null || true)
+if [[ $OUT != "" ]]; then
     # Cleanup the project
     oc -n ${CHE_OPENSHIFT_PROJECT} delete dc,route,svc,po --all
-    sleep 5
+    sleep 30
 fi
 
 # Deploy che from the template
