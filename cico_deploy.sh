@@ -11,7 +11,7 @@ yum install -y centos-release-openshift-origin
 yum install -y origin-clients
 
 # Login
-oc login -u "${CHE_OPENSHIFT_USERNAME}" -p "${CHE_OPENSHIFT_PASSWORD}"
+oc login "${CHE_OPENSHIFT_ENDPOINT}" -u "${CHE_OPENSHIFT_USERNAME}" -p "${CHE_OPENSHIFT_PASSWORD}"
 
 # Create or update template
 oc create -f che.json >/dev/null 2>&1 || oc replace -f che.json >/dev/null 2>&1
