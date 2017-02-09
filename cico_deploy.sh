@@ -11,7 +11,7 @@ yum install -y centos-release-openshift-origin
 yum install -y origin-clients
 
 # Login
-oc login "${CHE_OPENSHIFT_ENDPOINT}" -u "${CHE_OPENSHIFT_USERNAME}" -p "${CHE_OPENSHIFT_PASSWORD}"
+oc login "${CHE_OPENSHIFT_ENDPOINT}" -u "${CHE_OPENSHIFT_USERNAME}" -p "${CHE_OPENSHIFT_PASSWORD}" --insecure-skip-tls-verify
 
 # Ensure we're in the che project
 oc project ${CHE_OPENSHIFT_PROJECT}
