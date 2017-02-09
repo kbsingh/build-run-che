@@ -11,8 +11,7 @@
         "name": "eclipse-che"
     },
     "labels": {
-        "template": "eclipse-che",
-        "xpaas" : "5.0.0"
+        "template": "eclipse-che"
     },
     "parameters": [
         {
