@@ -17,18 +17,18 @@ oc login "${CHE_OPENSHIFT_ENDPOINT}" -u "${CHE_OPENSHIFT_USERNAME}" -p "${CHE_OP
 oc project ${CHE_OPENSHIFT_PROJECT}
 
 # Create or update template
-oc create -f che.json >/dev/null 2>&1 || oc replace -f che.json >/dev/null 2>&1
+oc -n ${CHE_OPENSHIFT_PROJECT} create -f che.json >/dev/null 2>&1 || oc -n ${CHE_OPENSHIFT_PROJECT} replace -f che.json >/dev/null 2>&1
 
 # Check if deploymentConfig is already present
-oc get dc che-host > /dev/null 2>&1
+oc -n ${CHE_OPENSHIFT_PROJECT} get dc che-host > /dev/null 2>&1
 if [[ $? -eq 0 ]]; then
     # Cleanup the project
-    oc delete dc,route,svc,po --all
+    oc -n ${CHE_OPENSHIFT_PROJECT} delete dc,route,svc,po --all
     sleep 5
 fi
 
 # Deploy che from the template
-oc new-app --template=eclipse-che \
+oc -n ${CHE_OPENSHIFT_PROJECT} new-app --template=eclipse-che \
     --param=APPLICATION_NAME=${CHE_APPLICATION_NAME} \
     --param=CHE_SERVER_DOCKER_IMAGE=${CHE_OPENSHIFT_IMAGE} \
     --param=CHE_OPENSHIFT_ENDPOINT=${CHE_OPENSHIFT_ENDPOINT} \
