@@ -10,7 +10,7 @@ cat jenkins-env | grep -e ^CHE_ > inherit-env
 yum install -y centos-release-openshift-origin
 yum install -y origin-clients
 
-if [ `echo $CHE_CUSTERS | wc -c` -le 2 ]; then
+if [ `echo $CHE_CLUSTERS | wc -c` -le 2 ]; then
   echo 'No clusters specified'
   exit 3
 fi
