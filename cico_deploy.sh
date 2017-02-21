@@ -33,7 +33,7 @@ for CLUSTER in $CHE_CLUSTERS; do
   oc project ${CHE_OPENSHIFT_PROJECT}
 
   # Create or update template
-  oc -n ${CHE_OPENSHIFT_PROJECT} create -f che.json >/dev/null 2>&1 || oc -n ${CHE_OPENSHIFT_PROJECT} replace -f che.json >/dev/null 2>&1
+  oc -n ${CHE_OPENSHIFT_PROJECT} create -f che.yaml >/dev/null 2>&1 || oc -n ${CHE_OPENSHIFT_PROJECT} replace -f che.yaml >/dev/null 2>&1
 
   # Check if deploymentConfig is already present
   OUT=$(oc -n ${CHE_OPENSHIFT_PROJECT} get dc ${CHE_APPLICATION_NAME} 2> /dev/null || true)
