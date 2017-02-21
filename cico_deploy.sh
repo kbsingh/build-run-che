@@ -15,6 +15,7 @@ if [ `echo $CHE_CLUSTERS | wc -c` -le 2 ]; then
   exit 3
 fi
 
+set +x
 for CLUSTER in $CHE_CLUSTERS; do 
   echo "Deploying to Cluster " $CLUSTER
   CHE_OPENSHIFT_ENDPOINT=$(eval echo \${CHE_${CLUSTER}_ENDPOINT})
@@ -28,7 +29,6 @@ for CLUSTER in $CHE_CLUSTERS; do
 
   # Login
   oc login "${CHE_OPENSHIFT_ENDPOINT}" -u "${CHE_OPENSHIFT_USERNAME}" -p "${CHE_OPENSHIFT_PASSWORD}" --insecure-skip-tls-verify
-
   # Ensure we're in the che project
   oc project ${CHE_OPENSHIFT_PROJECT}
 
@@ -54,4 +54,3 @@ for CLUSTER in $CHE_CLUSTERS; do
     --param=HOSTNAME_HTTP=${CHE_OPENSHIFT_HOSTNAME} \
     --param=CHE_LOG_LEVEL=INFO
 done
-
