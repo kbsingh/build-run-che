@@ -127,7 +127,7 @@ objects:
         containers:
         - name: "${APPLICATION_NAME}"
           image: "${CHE_SERVER_DOCKER_IMAGE}"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           privileged: true
           livenessProbe:
             tcpSocket:
