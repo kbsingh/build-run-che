@@ -4,7 +4,7 @@ HomeDir=/srv/che-build
 BuildUser=chebuilder
 
 export GIT_REPO=https://github.com/eclipse/che
-export GIT_BRANCH=master
+export GIT_BRANCH=openshift-connector
 
 export NPM_CONFIG_PREFIX=~/.che_node_modules
 export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
