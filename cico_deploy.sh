@@ -58,5 +58,6 @@ for CLUSTER in $CHE_CLUSTERS; do
     echo 'Deploy succeeded'
   else 
     echo 'Deploy Failed!'
+    exit 1
   fi
 done
