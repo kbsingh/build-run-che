@@ -1,6 +1,6 @@
 #!/bin/bash
 set -u
-set +e 
+set +e
 
 # Source build variables
 cat jenkins-env | grep -e ^CHE_ > inherit-env
@@ -40,7 +40,7 @@ for CLUSTER in $CHE_CLUSTERS; do
   OUT=$(oc -n ${CHE_OPENSHIFT_PROJECT} get dc ${CHE_APPLICATION_NAME} 2> /dev/null || true)
   if [[ $OUT != "" ]]; then
     # Cleanup the project
-    oc -n ${CHE_OPENSHIFT_PROJECT} delete dc,route,svc,po --all
+    oc -n ${CHE_OPENSHIFT_PROJECT} delete dc,route,svc,po,pvc --all || true
     sleep 30
   fi
 
