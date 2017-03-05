@@ -1,5 +1,6 @@
 #!/bin/bash
-set -eu
+set -u
+set +e 
 
 # Source build variables
 cat jenkins-env | grep -e ^CHE_ > inherit-env
@@ -53,4 +54,9 @@ for CLUSTER in $CHE_CLUSTERS; do
     --param=CHE_OPENSHIFT_SERVICEACCOUNTNAME=${CHE_OPENSHIFT_SERVICEACCOUNTNAME} \
     --param=HOSTNAME_HTTP=${CHE_OPENSHIFT_HOSTNAME} \
     --param=CHE_LOG_LEVEL=INFO > /dev/null 2>&1
+  if [ $? -eq 0 ]; then 
+    echo 'Deploy succeeded'
+  else 
+    echo 'Deploy Failed!'
+  fi
 done
