@@ -6,5 +6,8 @@ BuildUser=chebuilder
 export GIT_REPO=https://github.com/eclipse/che
 export GIT_BRANCH=openshift-connector
 
+export GIT_REPO_DEP=https://github.com/eclipse/che-dependencies
+export GIT_BRANCH_DEP=openshift-connector
+
 export NPM_CONFIG_PREFIX=~/.che_node_modules
 export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
