@@ -13,6 +13,7 @@
 git clone -b ${GIT_BRANCH_DEP} ${GIT_REPO_DEP}
 cd che-dependencies
 scl enable rh-maven33 'mvn -B clean install'
+cd ..
 
 git clone -b ${GIT_BRANCH} ${GIT_REPO}
 cd che 
