@@ -16,7 +16,9 @@ scl enable rh-maven33 'mvn -B clean install'
 cd ..
 
 git clone -b ${GIT_BRANCH} ${GIT_REPO}
-cd che 
+cd che
+# Use our modified stacks
+mv ./ide/che-core-ide-stacks/src/main/resources/stacks.json.centos \ 
+ ./ide/che-core-ide-stacks/src/main/resources/stacks.json
 mkdir $NPM_CONFIG_PREFIX
-#scl enable rh-nodejs4 'npm install -g bower gulp typings'
 scl enable rh-maven33 rh-nodejs4 'mvn -B clean install -Pfast'
