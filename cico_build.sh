@@ -27,14 +27,14 @@ if [ $? -eq 0 ]; then
   cd che/dockerfiles/che/
   cat Dockerfile.centos > Dockerfile
 
-  bash ./build.sh nightly-centos
+  bash ./build.sh
   if [ $? -ne 0 ]; then
     echo 'Docker Build Failed'
     exit 2
   fi
 
   # lets change the tag and push it to the registry
-  docker tag eclipse/che-server:nightly-centos rhche/che-server:nightly
+  docker tag eclipse/che-server:nightly rhche/che-server:nightly
   docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD -e noreply@redhat.com
   docker push rhche/che-server:nightly
   
