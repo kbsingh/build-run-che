@@ -10,7 +10,7 @@ items:
       project: che
       version: 1.0.54
       group: io.fabric8.online.apps
-    name: che
+    name: cheserviceaccount
 - apiVersion: v1
   kind: Service
   metadata:
@@ -52,7 +52,7 @@ items:
     name: admin
   subjects:
   - kind: ServiceAccount
-    name: che
+    name: cheserviceaccount
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
@@ -88,6 +88,23 @@ items:
       requests:
         storage: 1Gi
 - apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      volume.beta.kubernetes.io/storage-class: standard
+    labels:
+      provider: fabric8
+      project: che
+      version: 1.0.54
+      group: io.fabric8.online.apps
+    name: claim-che-workspace
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
   kind: ConfigMap
   metadata:
     labels:
@@ -101,7 +118,7 @@ items:
     workspace-storage: /home/user/che/workspaces
     workspace-storage-create-folders: "false"
     local-conf-dir: /etc/conf
-    openshift-serviceaccountname: che
+    openshift-serviceaccountname: cheserviceaccount
     che-server-evaluation-strategy: single-port
     log-level: INFO
     docker-connector: openshift
@@ -228,7 +245,7 @@ items:
             readOnly: false
           - mountPath: /data
             name: che-data-volume
-        serviceAccountName: che
+        serviceAccountName: cheserviceaccount
         volumes:
         - name: che-conf-volume
           persistentVolumeClaim:
@@ -262,4 +279,4 @@ items:
 #   seLinuxContext:
 #     type: RunAsAny
 #   users:
-#   - system:serviceaccount:eclipse-che:che
+#   - system:serviceaccount:eclipse-che:cheserviceaccount
