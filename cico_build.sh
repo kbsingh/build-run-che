@@ -38,9 +38,9 @@ if [ $? -eq 0 ]; then
   docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD -e noreply@redhat.com
   docker push rhche/che-server:nightly
   
-  # lets also push it locally
-  docker tag rhche/che-server:nightly 8.43.84.245.xip.io/che/che:nightly
-  docker push 8.43.84.245.xip.io/che/che:nightly
+  # lets also push it to registry.devshift.net
+  docker tag rhche/che-server:nightly registry.devshift.net/che/che:nightly
+  docker push registry.devshift.net/che/che:nightly
 
 else
   echo 'Build Failed!'
