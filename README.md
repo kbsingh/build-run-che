@@ -1,4 +1,6 @@
 
+[![Build Status](https://ci.centos.org/buildStatus/icon?job=devtools-build-run-che-build-master)](https://ci.centos.org/job/devtools-build-run-che-build-master)
+
 build-run-che
 ============
 
