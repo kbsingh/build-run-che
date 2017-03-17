@@ -10,7 +10,7 @@ items:
       project: che
       version: 1.0.54
       group: io.fabric8.online.apps
-    name: cheserviceaccount
+    name: che
 - apiVersion: v1
   kind: Service
   metadata:
@@ -52,7 +52,7 @@ items:
     name: admin
   subjects:
   - kind: ServiceAccount
-    name: cheserviceaccount
+    name: che
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
@@ -118,7 +118,7 @@ items:
     workspace-storage: /home/user/che/workspaces
     workspace-storage-create-folders: "false"
     local-conf-dir: /etc/conf
-    openshift-serviceaccountname: cheserviceaccount
+    openshift-serviceaccountname: che
     che-server-evaluation-strategy: single-port
     log-level: INFO
     docker-connector: openshift
@@ -245,7 +245,7 @@ items:
             readOnly: false
           - mountPath: /data
             name: che-data-volume
-        serviceAccountName: cheserviceaccount
+        serviceAccountName: che
         volumes:
         - name: che-conf-volume
           persistentVolumeClaim:
@@ -269,14 +269,3 @@ items:
     to:
       kind: Service
       name: che-host
-# - apiVersion: v1
-#   kind: SecurityContextConstraints
-# cf. https://docs.openshift.org/latest/architecture/additional_concepts/authorization.html#security-context-constraints
-#   metadata:
-#     name: scc-anyuid
-#   runAsUser:
-#     type: RunAsAny
-#   seLinuxContext:
-#     type: RunAsAny
-#   users:
-#   - system:serviceaccount:eclipse-che:cheserviceaccount
