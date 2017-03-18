@@ -33,14 +33,20 @@ if [ $? -eq 0 ]; then
     exit 2
   fi
 
+  TAG=$(git rev-parse --short HEAD)
+  
   # lets change the tag and push it to the registry
   docker tag eclipse/che-server:nightly rhche/che-server:nightly
+  docker tag eclipse/che-server:nightly rhche/che-server:${TAG}
   docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD -e noreply@redhat.com
   docker push rhche/che-server:nightly
+  docker push rhche/che-server:${TAG}
   
   # lets also push it to registry.devshift.net
   docker tag rhche/che-server:nightly registry.devshift.net/che/che:nightly
+  docker tag rhche/che-server:nightly registry.devshift.net/che/che:${TAG}
   docker push registry.devshift.net/che/che:nightly
+  docker push registry.devshift.net/che/che:${TAG}
 
 else
   echo 'Build Failed!'
