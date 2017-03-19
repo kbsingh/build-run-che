@@ -56,8 +56,6 @@ items:
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    annotations:
-      volume.beta.kubernetes.io/storage-class: standard
     labels:
       provider: fabric8
       project: che
@@ -73,8 +71,6 @@ items:
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    annotations:
-      volume.beta.kubernetes.io/storage-class: standard
     labels:
       provider: fabric8
       project: che
@@ -90,8 +86,6 @@ items:
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    annotations:
-      volume.beta.kubernetes.io/storage-class: standard
     labels:
       provider: fabric8
       project: che
