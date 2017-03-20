@@ -13,9 +13,12 @@ yum -y update
 yum -y install centos-release-scl java-1.8.0-openjdk-devel git patch bzip2 golang docker
 yum -y install rh-maven33 rh-nodejs4
 
+useradd ${BuildUser}
+groupadd docker
+gpasswd -a ${BuildUser} docker
+
 systemctl start docker
 
-useradd ${BuildUser}
 mkdir -p ${HomeDir}
 chown ${BuildUser}:${BuildUser} ${HomeDir}
 
