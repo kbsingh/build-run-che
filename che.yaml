@@ -61,21 +61,6 @@ items:
       project: che
       version: 1.0.54
       group: io.fabric8.online.apps
-    name: che-conf-volume
-  spec:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 1Gi
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    labels:
-      provider: fabric8
-      project: che
-      version: 1.0.54
-      group: io.fabric8.online.apps
     name: che-data-volume
   spec:
     accessModes:
@@ -241,9 +226,6 @@ items:
             name: che-data-volume
         serviceAccountName: che
         volumes:
-        - name: che-conf-volume
-          persistentVolumeClaim:
-            claimName: che-conf-volume
         - name: che-data-volume
           persistentVolumeClaim:
             claimName: che-data-volume
