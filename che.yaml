@@ -219,9 +219,6 @@ items:
               port: 8080
             timeoutSeconds: 10
           volumeMounts:
-          - mountPath: /conf
-            name: che-conf-volume
-            readOnly: false
           - mountPath: /data
             name: che-data-volume
         serviceAccountName: che
