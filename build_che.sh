@@ -12,10 +12,10 @@
 # approved and PR is merged in upstream master branch 
 git clone -b ${GIT_BRANCH_DEP} ${GIT_REPO_DEP}
 cd che-dependencies
-scl enable rh-maven33 'mvn -B clean install'
+scl enable rh-maven33 'mvn -B clean install -U'
 cd ..
 
 git clone -b ${GIT_BRANCH} ${GIT_REPO}
 cd che
 mkdir $NPM_CONFIG_PREFIX
-scl enable rh-maven33 rh-nodejs4 'mvn -B clean install'
+scl enable rh-maven33 rh-nodejs4 'mvn -B clean install -U -Pintegration'
