@@ -103,6 +103,7 @@ items:
     docker-connector: openshift
     port: "8080"
     remote-debugging-enabled: "false"
+    che-oauth-github-forceactivation: "true"
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -199,6 +200,11 @@ items:
             valueFrom:
               configMapKeyRef:
                 key: remote-debugging-enabled
+                name: che
+          - name: CHE_OAUTH_GITHUB_FORCEACTIVATION
+            valueFrom:
+              configMapKeyRef:
+                key: che-oauth-github-forceactivation
                 name: che
           image: rhche/che-server:nightly
           imagePullPolicy: Always
