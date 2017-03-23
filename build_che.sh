@@ -18,4 +18,4 @@ cd ..
 git clone -b ${GIT_BRANCH} ${GIT_REPO}
 cd che
 mkdir $NPM_CONFIG_PREFIX
-scl enable rh-maven33 rh-nodejs4 'mvn -B clean install -U -Pfast'
+scl enable rh-maven33 rh-nodejs4 'mvn -B clean install -U'
