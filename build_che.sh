@@ -16,13 +16,12 @@ scl enable rh-maven33 'mvn -B clean install -U'
 cd ..
 
 git clone -b ${GIT_BRANCH} ${GIT_REPO}
-cd che
 
 # Patch to ignore 1 unit test for SVN plugin
 # The test fails on CentOS 7. That is probably
 # related to the version of subversion that comes
 # with CentOS 7.
-FILE_TO_PATCH="./plugins/plugin-svn/che-plugin-svn-ext-server/src/test/java/org/eclipse/che/plugin/svn/server/SubversionApiITest.java"
+FILE_TO_PATCH="./che/plugins/plugin-svn/che-plugin-svn-ext-server/src/test/java/org/eclipse/che/plugin/svn/server/SubversionApiITest.java"
 PATCH="./SubversionApiITest.patch"
 patch --quiet $FILE_TO_PATCH $PATCH
 if [ $? -eq 0 ]; then
@@ -32,5 +31,6 @@ else
     exit 1
 fi
 
+cd che
 mkdir $NPM_CONFIG_PREFIX
 scl enable rh-maven33 rh-nodejs4 'mvn -B clean install -U'
