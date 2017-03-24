@@ -22,7 +22,7 @@ systemctl start docker
 mkdir -p ${HomeDir}
 chown ${BuildUser}:${BuildUser} ${HomeDir}
 
-cp config build_che.sh ${HomeDir}/
+cp config build_che.sh SubversionApiITest.patch ${HomeDir}/
 cd ${HomeDir}
 runuser -u ${BuildUser} ./build_che.sh
 if [ $? -eq 0 ]; then
