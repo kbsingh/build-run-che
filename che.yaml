@@ -124,6 +124,8 @@ items:
     name: che
   spec:
     replicas: 1
+    strategy:
+      type: Recreate
     selector:
       project: che
       provider: fabric8
@@ -147,6 +149,8 @@ items:
       spec:
         containers:
         - env:
+          - name: JAVA_OPTS
+            value: "-Xms256M -Xmx256M"
           - name: CHE_DOCKER_IP_EXTERNAL
             valueFrom:
               configMapKeyRef:
