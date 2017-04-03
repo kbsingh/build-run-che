@@ -99,11 +99,19 @@ items:
     local-conf-dir: /etc/conf
     openshift-serviceaccountname: che
     che-server-evaluation-strategy: single-port
-    log-level: INFO
+    log-level: DEBUG
     docker-connector: openshift
     port: "8080"
     remote-debugging-enabled: "false"
     che-oauth-github-forceactivation: "true"
+    java-opts: >-
+        -XX:+UseSerialGC -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40
+        -XX:MaxRAM=700m -Xms256m
+    che-workspaces-java-opts: >-
+        -XX:+UseSerialGC -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40
+        -XX:MaxRAM=1300m -Xms256m    
+    workspaces-memory-limit: 1300Mi
+    workspaces-memory-request: 500Mi
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -148,9 +156,12 @@ items:
           group: io.fabric8.online.apps
       spec:
         containers:
-        - env:
-          - name: JAVA_OPTS
-            value: "-Xms256M -Xmx256M"
+        - resources:
+              limits:
+                memory: 700Mi
+              requests:
+                memory: 256Mi
+          env:
           - name: CHE_DOCKER_IP_EXTERNAL
             valueFrom:
               configMapKeyRef:
@@ -210,7 +221,29 @@ items:
               configMapKeyRef:
                 key: che-oauth-github-forceactivation
                 name: che
-          image: rhche/che-server:nightly
+          - name: CHE_WORKSPACE_AUTO_START
+            value: "false"
+          - name: JAVA_OPTS
+            valueFrom:
+              configMapKeyRef:
+                key: java-opts
+                name: che
+          - name: CHE_OPENSHIFT_WORKSPACE_MEMORY_OVERRIDE
+            valueFrom:
+              configMapKeyRef:
+                name: che
+                key: workspaces-memory-limit
+          - name: CHE_OPENSHIFT_WORKSPACE_MEMORY_REQUEST
+            valueFrom:
+              configMapKeyRef:
+                name: che
+                key: workspaces-memory-request
+          - name: CHE_WORKSPACE_JAVA_OPTIONS
+            valueFrom:
+              configMapKeyRef:
+                name: che
+                key: che-workspaces-java-opts
+          image: mariolet/che-server:nightly
           imagePullPolicy: Always
           livenessProbe:
             initialDelaySeconds: 120
