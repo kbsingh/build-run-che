@@ -3,11 +3,17 @@
 HomeDir=/srv/che-build
 BuildUser=chebuilder
 
-export GIT_REPO=https://github.com/eclipse/che
-export GIT_BRANCH=openshift-connector
+export RH_CHE_GIT_REPO=https://github.com/redhat-developer/rh-che
+export RH_CHE_GIT_BRANCH=che-176-rh-che-assembly
 
-export GIT_REPO_DEP=https://github.com/eclipse/che-dependencies
-export GIT_BRANCH_DEP=openshift-connector
+export CHE_FORK=eclipse
+export CHE_BRANCH=openshift-connector
+
+export CHE_DEP_FORK=eclipse
+export CHE_DEP_BRANCH=openshift-connector
 
 export NPM_CONFIG_PREFIX=~/.che_node_modules
 export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
+
+export RH_DIST_SUFFIX=openshiftio
+export RH_NO_DASHBOARD_SUFFIX=without-dashboard
