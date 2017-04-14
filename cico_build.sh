@@ -22,35 +22,60 @@ systemctl start docker
 mkdir -p ${HomeDir}
 chown ${BuildUser}:${BuildUser} ${HomeDir}
 
-cp config build_che.sh SubversionApiITest.patch ${HomeDir}/
+cp config build_che.sh ${HomeDir}/
 cd ${HomeDir}
 runuser -u ${BuildUser} ./build_che.sh
 if [ $? -eq 0 ]; then
-  # Now lets build the local docker image
-  cd che/dockerfiles/che/
+
+  cd rh-che
+  RH_CHE_TAG=$(git rev-parse --short HEAD)
+  
+  cd target/export/che-dependencies/che
+  UPSTREAM_TAG=$(git rev-parse --short HEAD)
+
+  # Now lets build the local docker images
+  cd dockerfiles/che/
   cat Dockerfile.centos > Dockerfile
 
-  bash ./build.sh
-  if [ $? -ne 0 ]; then
-    echo 'Docker Build Failed'
-    exit 2
-  fi
+  for distribution in `ls -1 ${HomeDir}/eclipse-ide-*.tar.gz`; do
+    case "$distribution" in
+      eclipse-che-*-${RH_DIST_SUFFIX}-${RH_NO_DASHBOARD_SUFFIX}*)
+        TAG=${UPSTREAM_TAG}-osio-no-dashboard-${RH_CHE_TAG}
+        NIGHTLY=nightly-osio-no-dashboard
+        ;;
+      eclipse-che-*-${RH_DIST_SUFFIX}*)
+        TAG=${UPSTREAM_TAG}-osio-${RH_CHE_TAG}
+        NIGHTLY=nightly-osio
+        ;;
+      eclipse-che-*)
+        TAG=${UPSTREAM_TAG}
+        NIGHTLY=nightly
+        ;;
+    esac
+        
+    rm ../../assembly/assembly-main/target/eclipse-che-*.tar.gz
+    cp ${HomeDir}/${distribution} ../../assembly/assembly-main/target
 
-  TAG=$(git rev-parse --short HEAD)
-  
-  # lets change the tag and push it to the registry
-  docker tag eclipse/che-server:nightly rhche/che-server:nightly
-  docker tag eclipse/che-server:nightly rhche/che-server:${TAG}
-  docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD -e noreply@redhat.com
-  docker push rhche/che-server:nightly
-  docker push rhche/che-server:${TAG}
-  
-  # lets also push it to registry.devshift.net
-  docker tag rhche/che-server:nightly registry.devshift.net/che/che:nightly
-  docker tag rhche/che-server:nightly registry.devshift.net/che/che:${TAG}
-  docker push registry.devshift.net/che/che:nightly
-  docker push registry.devshift.net/che/che:${TAG}
-
+    bash ./build.sh
+    if [ $? -ne 0 ]; then
+      echo 'Docker Build Failed'
+      exit 2
+    fi
+    
+    # lets change the tag and push it to the registry
+    docker tag eclipse/che-server:nightly rhche/che-server:${NIGHTLY}
+    docker tag eclipse/che-server:nightly rhche/che-server:${TAG}
+    docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD -e noreply@redhat.com
+    docker push rhche/che-server:${NIGHTLY}
+    docker push rhche/che-server:${TAG}
+    
+    # lets also push it to registry.devshift.net
+    docker tag rhche/che-server:${NIGHTLY} registry.devshift.net/che/che:${NIGHTLY}
+    docker tag rhche/che-server:${NIGHTLY} registry.devshift.net/che/che:${TAG}
+    docker push registry.devshift.net/che/che:${NIGHTLY}
+    docker push registry.devshift.net/che/che:${TAG}
+  done
+    
 else
   echo 'Build Failed!'
   exit 1
