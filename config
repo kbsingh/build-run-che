@@ -15,5 +15,5 @@ export CHE_DEP_BRANCH=openshift-connector
 export NPM_CONFIG_PREFIX=~/.che_node_modules
 export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
 
-export RH_DIST_SUFFIX=openshiftio
+export RH_DIST_SUFFIX=fabric8
 export RH_NO_DASHBOARD_SUFFIX=without-dashboard
