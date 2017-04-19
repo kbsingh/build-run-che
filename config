@@ -4,7 +4,7 @@ HomeDir=/srv/che-build
 BuildUser=chebuilder
 
 export RH_CHE_GIT_REPO=https://github.com/redhat-developer/rh-che
-export RH_CHE_GIT_BRANCH=che-176-rh-che-assembly
+export RH_CHE_GIT_BRANCH=master
 
 export CHE_FORK=eclipse
 export CHE_BRANCH=openshift-connector
