@@ -243,7 +243,7 @@ items:
               configMapKeyRef:
                 name: che
                 key: che-workspaces-java-opts
-          image: mariolet/che-server:nightly
+          image: rhche/che-server:nightly-fabric8-no-dashboard
           imagePullPolicy: Always
           livenessProbe:
             initialDelaySeconds: 120

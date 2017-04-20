@@ -44,8 +44,9 @@ for CLUSTER in $CHE_CLUSTERS; do
   # oc adm policy add-scc-to-group nonrot system:authenticated
   cat che.yaml | \
       sed "s/    hostname-http:.*/    hostname-http: ${CHE_OPENSHIFT_HOSTNAME}/" | \
+      sed "s/          image: rhche/          image: ${DOCKER_HUB_NAMESPACE}/" | \
       sed "s/<route-host>/${CHE_OPENSHIFT_HOSTNAME}/" | \
-      oc apply -f -
+            oc apply -f -
   if [ $? -eq 0 ]; then 
     echo 'Deploy succeeded'
   else 
