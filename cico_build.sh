@@ -37,24 +37,24 @@ if [ $? -eq 0 ]; then
   cd dockerfiles/che/
   cat Dockerfile.centos > Dockerfile
 
-  for distribution in `ls -1 ${HomeDir}/eclipse-ide-*.tar.gz`; do
+  for distribution in `ls -1 ${HomeDir}/eclipse-che-*.tar.gz`; do
     case "$distribution" in
-      eclipse-che-*-${RH_DIST_SUFFIX}-${RH_NO_DASHBOARD_SUFFIX}*)
-        TAG=${UPSTREAM_TAG}-osio-no-dashboard-${RH_CHE_TAG}
-        NIGHTLY=nightly-osio-no-dashboard
+      ${HomeDir}/eclipse-che-*-${RH_DIST_SUFFIX}-${RH_NO_DASHBOARD_SUFFIX}*)
+        TAG=${UPSTREAM_TAG}-${RH_DIST_SUFFIX}-no-dashboard-${RH_CHE_TAG}
+        NIGHTLY=nightly-${RH_DIST_SUFFIX}-no-dashboard
         ;;
-      eclipse-che-*-${RH_DIST_SUFFIX}*)
-        TAG=${UPSTREAM_TAG}-osio-${RH_CHE_TAG}
-        NIGHTLY=nightly-osio
+      ${HomeDir}/eclipse-che-*-${RH_DIST_SUFFIX}*)
+        TAG=${UPSTREAM_TAG}-${RH_DIST_SUFFIX}-${RH_CHE_TAG}
+        NIGHTLY=nightly-${RH_DIST_SUFFIX}
         ;;
-      eclipse-che-*)
+      ${HomeDir}/eclipse-che-*)
         TAG=${UPSTREAM_TAG}
         NIGHTLY=nightly
         ;;
     esac
         
     rm ../../assembly/assembly-main/target/eclipse-che-*.tar.gz
-    cp ${HomeDir}/${distribution} ../../assembly/assembly-main/target
+    cp ${distribution} ../../assembly/assembly-main/target
 
     bash ./build.sh
     if [ $? -ne 0 ]; then
@@ -63,17 +63,19 @@ if [ $? -eq 0 ]; then
     fi
     
     # lets change the tag and push it to the registry
-    docker tag eclipse/che-server:nightly rhche/che-server:${NIGHTLY}
-    docker tag eclipse/che-server:nightly rhche/che-server:${TAG}
-    docker login -u rhchebot -p $RHCHEBOT_DOCKER_HUB_PASSWORD -e noreply@redhat.com
-    docker push rhche/che-server:${NIGHTLY}
-    docker push rhche/che-server:${TAG}
+    docker tag eclipse/che-server:nightly ${DOCKER_HUB_NAMESPACE}/che-server:${NIGHTLY}
+    docker tag eclipse/che-server:nightly ${DOCKER_HUB_NAMESPACE}/che-server:${TAG}
+    docker login -u ${DOCKER_HUB_USER} -p $DOCKER_HUB_PASSWORD -e noreply@redhat.com
+    docker push ${DOCKER_HUB_NAMESPACE}/che-server:${NIGHTLY}
+    docker push ${DOCKER_HUB_NAMESPACE}/che-server:${TAG}
     
+    if [ "${DOCKER_HUB_USER}" == "${RHCHEBOT_DOCKER_HUB_USER}" ]; then
     # lets also push it to registry.devshift.net
-    docker tag rhche/che-server:${NIGHTLY} registry.devshift.net/che/che:${NIGHTLY}
-    docker tag rhche/che-server:${NIGHTLY} registry.devshift.net/che/che:${TAG}
-    docker push registry.devshift.net/che/che:${NIGHTLY}
-    docker push registry.devshift.net/che/che:${TAG}
+      docker tag ${DOCKER_HUB_NAMESPACE}/che-server:${NIGHTLY} registry.devshift.net/che/che:${NIGHTLY}
+      docker tag ${DOCKER_HUB_NAMESPACE}/che-server:${NIGHTLY} registry.devshift.net/che/che:${TAG}
+      docker push registry.devshift.net/che/che:${NIGHTLY}
+      docker push registry.devshift.net/che/che:${TAG}
+    fi
   done
     
 else
