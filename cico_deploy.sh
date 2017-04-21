@@ -45,6 +45,7 @@ for CLUSTER in $CHE_CLUSTERS; do
   cat che.yaml | \
       sed "s/    hostname-http:.*/    hostname-http: ${CHE_OPENSHIFT_HOSTNAME}/" | \
       sed "s/          image: rhche/          image: ${DOCKER_HUB_NAMESPACE}/" | \
+      sed "s/nightly-fabric8-no-dashboard/${RH_CHE_DOCKER_IMAGE_VERSION}/" | \
       sed "s/<route-host>/${CHE_OPENSHIFT_HOSTNAME}/" | \
             oc apply -f -
   if [ $? -eq 0 ]; then 
