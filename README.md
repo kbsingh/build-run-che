@@ -14,6 +14,6 @@ https://github.com/eclipse/che
 CI Runs
 =======
 
-There is a CI job at : https://ci.centos.org/view/Devtools/job/devtools-build-run-che-build-master/ that runs on each merge to master in this repo.
+There is a CI job at : https://ci.centos.org/view/Devtools/job/devtools-build-run-che-build-master/ that runs on each merge to master in this repository.
 
 On success, it will push the che container to dockerhub at [rhche/che-server](https://hub.docker.com/r/rhche/che-server/), and another copy is pushed to the local CentOS CI registry. The CentOS CI Registry hosted image can then be used by other components in the CentOS CI services, either as triggers or as a point of integration.
