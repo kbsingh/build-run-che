@@ -40,16 +40,22 @@ if [ $? -eq 0 ]; then
   for distribution in `ls -1 ${HomeDir}/eclipse-che-*.tar.gz`; do
     case "$distribution" in
       ${HomeDir}/eclipse-che-*-${RH_DIST_SUFFIX}-${RH_NO_DASHBOARD_SUFFIX}*)
-        TAG=${UPSTREAM_TAG}-${RH_DIST_SUFFIX}-no-dashboard-${RH_CHE_TAG}
-        NIGHTLY=nightly-${RH_DIST_SUFFIX}-no-dashboard
+        # We are not pushing the the no-dashboard tag because CI has an issue
+        # when publishing > 1 tag at a time 
+        # TAG=${UPSTREAM_TAG}-${RH_DIST_SUFFIX}-no-dashboard-${RH_CHE_TAG}
+        # NIGHTLY=nightly-${RH_DIST_SUFFIX}-no-dashboard
+        continue
         ;;
       ${HomeDir}/eclipse-che-*-${RH_DIST_SUFFIX}*)
         TAG=${UPSTREAM_TAG}-${RH_DIST_SUFFIX}-${RH_CHE_TAG}
         NIGHTLY=nightly-${RH_DIST_SUFFIX}
         ;;
       ${HomeDir}/eclipse-che-*)
-        TAG=${UPSTREAM_TAG}
-        NIGHTLY=nightly
+        # We are not pushing the the upstream tag because CI has an issue
+        # when publishing > 1 tag at a time 
+        # TAG=${UPSTREAM_TAG}
+        # NIGHTLY=nightly
+        continue
         ;;
     esac
         
@@ -66,14 +72,18 @@ if [ $? -eq 0 ]; then
     docker tag eclipse/che-server:nightly ${DOCKER_HUB_NAMESPACE}/che-server:${NIGHTLY}
     docker tag eclipse/che-server:nightly ${DOCKER_HUB_NAMESPACE}/che-server:${TAG}
     docker login -u ${DOCKER_HUB_USER} -p $DOCKER_HUB_PASSWORD -e noreply@redhat.com
-    docker push ${DOCKER_HUB_NAMESPACE}/che-server:${NIGHTLY}
+    # We are not pushing the nightly tag because we don't need it and CI has an issue
+    # when publishing > 1 tag at a time 
+    # docker push ${DOCKER_HUB_NAMESPACE}/che-server:${NIGHTLY}
     docker push ${DOCKER_HUB_NAMESPACE}/che-server:${TAG}
     
     if [ "${DOCKER_HUB_USER}" == "${RHCHEBOT_DOCKER_HUB_USER}" ]; then
     # lets also push it to registry.devshift.net
       docker tag ${DOCKER_HUB_NAMESPACE}/che-server:${NIGHTLY} registry.devshift.net/che/che:${NIGHTLY}
       docker tag ${DOCKER_HUB_NAMESPACE}/che-server:${NIGHTLY} registry.devshift.net/che/che:${TAG}
-      docker push registry.devshift.net/che/che:${NIGHTLY}
+      # We are not pushing the nightly tag because we don't need it and CI has an issue
+      # when publishing > 1 tag at a time 
+      #docker push registry.devshift.net/che/che:${NIGHTLY}
       docker push registry.devshift.net/che/che:${TAG}
     fi
   done
