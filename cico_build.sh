@@ -75,7 +75,11 @@ if [ $? -eq 0 ]; then
     # We are not pushing the nightly tag because we don't need it and CI has an issue
     # when publishing > 1 tag at a time 
     # docker push ${DOCKER_HUB_NAMESPACE}/che-server:${NIGHTLY}
-    docker push ${DOCKER_HUB_NAMESPACE}/che-server:${TAG}
+    export CHE_SERVER_DOCKER_IMAGE=${DOCKER_HUB_NAMESPACE}/che-server:${TAG}
+    env_var_file=${HomeDir}/che.image.env
+    touch $env_var_file
+    echo 'export CHE_SERVER_DOCKER_IMAGE='${CHE_SERVER_DOCKER_IMAGE} > $env_var_file
+    docker push ${CHE_SERVER_DOCKER_IMAGE}
     
     if [ "${DOCKER_HUB_USER}" == "${RHCHEBOT_DOCKER_HUB_USER}" ]; then
     # lets also push it to registry.devshift.net
